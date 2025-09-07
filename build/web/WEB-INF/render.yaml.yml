@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: ant-java-web-app
+    env: docker
+    plan: free
+    branch: main
+    repo: https://github.com/YOUR_USERNAME/YOUR_REPO_NAME
+    dockerfilePath: ./Dockerfile
+    buildFilter: []
+    startCommand: ""
+    autoDeploy: true
+## YAML Template.
+---
