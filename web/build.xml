@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MyAntWebApp" default="build-war" basedir=".">
+  <property name="src.dir" value="src"/>
+  <property name="build.classes.dir" value="build/classes"/>
+  <property name="web.dir" value="web"/>
+  <property name="dist.dir" value="dist"/>
+  <property name="war.name" value="app.war"/>
+
+  <target name="clean">
+    <delete dir="${build.classes.dir}"/>
+    <delete dir="${dist.dir}"/>
+  </target>
+
+  <target name="init" depends="clean">
+    <mkdir dir="${build.classes.dir}"/>
+    <mkdir dir="${dist.dir}"/>
+  </target>
+
+  <target name="compile" depends="init">
+    <javac srcdir="${src.dir}" destdir="${build.classes.dir}" includeantruntime="false"/>
+  </target>
+
+  <target name="copy-web" depends="compile">
+    <copy todir="${dist.dir}/web">
+      <fileset dir="${web.dir}"/>
+    </copy>
+  </target>
+
+  <target name="build-war" depends="copy-web">
+    <war destfile="${dist.dir}/${war.name}" webxml="${web.dir}/WEB-INF/web.xml">
+      <fileset dir="${dist.dir}/web"/>
+      <classes dir="${build.classes.dir}"/>
+    </war>
+  </target>
+</project>
