@@ -1,32 +1,14 @@
-# To change this license header, choose License Headers in Project Properties.
-# To change this template file, choose Tools | Templates
-# and open the template in the editor.
-FROM alpine:latest
-
-CMD ["/bin/sh"]
-# Use Tomcat with Java pre-installed
+# Use official Tomcat image with Java 17
 FROM tomcat:9.0-jdk17
 
-# Set working directory inside the container
-WORKDIR /usr/src/app
+# Remove default webapps (optional, keeps container clean)
+RUN rm -rf /usr/local/tomcat/webapps/*
 
-# Copy your project files into the container
-COPY . /usr/src/app
+# Copy your WAR file into Tomcat’s webapps directory
+COPY dist/your-app.war /usr/local/tomcat/webapps/ROOT.war
 
-# Install Ant (needed to run your build.xml)
-RUN apt-get update && \
-    apt-get install -y ant && \
-    rm -rf /var/lib/apt/lists/*
-
-# Run Ant to build the project
-RUN ant
-
-# Deploy WAR (or other output) to Tomcat webapps
-# Adjust this if your WAR is in a different folder
-RUN cp build/*.war /usr/local/tomcat/webapps/
-
-# Expose port 8080 (Tomcat default)
+# Expose port 8080 for Render
 EXPOSE 8080
 
-# Start Tomcat server
+# Start Tomcat
 CMD ["catalina.sh", "run"]
